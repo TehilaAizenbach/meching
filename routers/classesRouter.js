@@ -44,7 +44,7 @@ router.post('/addPoints',async(req,res)=>{
     if (classItem) {
       classItem.points = classItem.points + points;
       const result = await ClassModel.updateOne({ class_name: name }, classItem);
-      
+      console.log("");
     }
     res.json("success").status(200);
   } catch (error) {

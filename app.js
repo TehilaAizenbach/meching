@@ -5,6 +5,7 @@ const classesRouter=require("./routers/classesRouter")
 const projectRouter=require("./routers/projectRoust")
 const mysql = require('mysql2/promise');
 const cors=require('cors')
+require('./db/mongoConnect')
 
 
 
@@ -12,14 +13,12 @@ const cors=require('cors')
 
 const app = express();
 const PORT = 3001;
-app.use(cors());
-const sequelize = new Sequelize('kiryatata', 'root', 'Tehila@110702', {
-    host: 'localhost',
-    dialect: 'mysql',
-  });
-  
 
+  
+  app.use(cors());
   app.use(express.json());
+  // app.use(express.static(path.join(__dirname, "public")));
+
   app.use('/students', studentRoutes);
   app.use('/classes', classesRouter);
   app.use('/project',projectRouter)

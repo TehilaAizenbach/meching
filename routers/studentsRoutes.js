@@ -5,16 +5,6 @@ const mysql = require('mysql2/promise');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-// Configure MySQL connection
-const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'Tehila@110702',
-  database: 'kiryatata',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
 
 const studentSchema = new Schema({
   id: String,
@@ -24,8 +14,22 @@ const studentSchema = new Schema({
   target: Number,
   points: Number
 });
+const studentModel = mongoose.model('students', studentSchema);
+
+// const resetStudentPoints=async()=>{
+//   try {
+//     const students= await studentModel.find();
+//     await students.forEach((studentItem)=> {
+//       studentItem.points=0;
+//       studentModel.findOneAndUpdate({id:studentItem.id},studentItem);
+//     });
+//   } catch (error) {
+//     console.error('Error finding students:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   } 
+// }
 router.get('/', async (req, res) => {
-  const studentModel = mongoose.model('students', studentSchema);
+  
 
   try {
     // Use await to wait for the query to complete
@@ -61,7 +65,8 @@ router.post('/addPoints',async(req,res)=>{
       const result = await studentModel.updateOne({ id: id }, student);
       
     }
-    res.json("success").status(200);
+    const students=displayStudents();
+    res.json(students).status(200);
   } catch (error) {
     console.error('Error finding classes:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -77,6 +82,27 @@ router.post('/addPoints',async(req,res)=>{
   //   res.status(500).json({ error: 'Internal Server Error' });
 
  });
+
+router.post('/addStudents',async(req,res)=>{
+})
+router.post('/updateStudents',async(req,res)=>{
+
+})
+router.post('/resetPoints',async(req,res)=>{
+  try {
+    const students= await studentModel.find();
+     await  students.forEach(async (studentItem) => {
+      studentItem.points=0;
+      await studentModel.findOneAndUpdate({id:studentItem.id},studentItem);
+    });
+    const studentsfind=await studentModel.find()
+    const  studentData =  studentsfind.map( studentItem =>  studentItem.toObject());
+    res.json(studentData);
+  } catch (error) {
+    console.error('Error finding students:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } 
+})
 
 
 module.exports = router;

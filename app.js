@@ -21,7 +21,8 @@ const PORT = 3001;
 
   app.use('/students', studentRoutes);
   app.use('/classes', classesRouter);
-  app.use('/project',projectRouter)
+  app.use('/project',projectRouter);
+  
 
 
   app.listen(PORT, () => {

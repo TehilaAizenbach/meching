@@ -4,17 +4,10 @@ const { DateTime } = require('mssql');
 const router = express.Router();
 const mysql = require('mysql2/promise');
 const mongoose = require('mongoose');
+const { route } = require('./studentsRoutes');
 const { Schema } = mongoose;
-// Configure MySQL connection
-// const pool = mysql.createPool({
-//   host: 'localhost',
-//   user: 'root',
-//   password: 'Tehila@110702',
-//   database: 'kiryatata',
-//   waitForConnections: true,
-//   connectionLimit: 10,
-//   queueLimit: 0,
-// });
+// const {studentModel,resetStudentPoints}=require("./studentsRoutes")
+
 
 const projectSchema = new Schema({
   code:Number,
@@ -40,14 +33,6 @@ router.get('/', async (req, res) => {
     console.error('Error finding classes:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   } 
-  
-    // try {
-    //   const [rows] = await pool.query('SELECT * FROM project');;
-    //   res.status(200).json(rows);
-    // } catch (error) {
-    //   console.error(error);
-    //   res.status(500).json({ error: 'Internal Server Error' });
-    // }
   });
 
 
@@ -67,18 +52,58 @@ router.post('/addPoints',async(req,res)=>{
     console.error('Error finding classes:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   } 
-//   const [existingProject] = await pool.query(`SELECT * FROM project WHERE code =${code}`, [code]);
-//  try {
-//   if (existingProject.length === 0) {
-//     return res.status(404).json({ error: 'Student not found' });
-//   }
-//   await pool.query(`UPDATE project SET points = ${existingProject[0].points + points}  WHERE code =${code}`,[code]);
-//  } catch (error) {
-//   console.error(error);
-//   res.status(500).json({ error: 'Internal Server Error' });
-
-//  }
 })
 
+
+router.post('/resetPoints',async(req,res)=>
+{
+  try{
+    const {code}=req.body;
+    const project=await projectModel.findOne({code:code});
+
+    if(project){
+      project.points=0;
+      const result = await projectModel.updateOne({ code: code }, project).toString();
+      // const resultSturesetStudentPoints
+  
+      
+    }else{
+      return res.status(404).json({ error: 'Project not found' });
+    }
+    try {
+      const projects = await projectModel.find();
+      const  projactData =  await projects.map( projactItem =>  projactItem.toObject());
+      res.json(projactData);
+    } catch (error) {
+      
+    }
+ 
+   
+   
+  }catch(error){
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+
+
+router.post('/update',async(req,res)=>
+{
+
+    try {
+      const {project}=req.body;
+      projetcFind=await projectModel.findOne({ code: project.code });
+      projetcFind.startDate=project.startDate;
+      projetcFind.finish_Date=project.finish_Date;
+     
+      const result = await projectModel.updateOne({ _id: project._id }, projetcFind)
+      const projects = await projectModel.find();
+      const  projactData =  await projects.map( projactItem =>  projactItem.toObject());
+      res.json(projactData);
+    } catch (error) {
+      console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
 
 module.exports = router;

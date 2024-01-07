@@ -65,15 +65,15 @@ router.post('/resetPoints',async(req,res)=>
       project.points=0;
       const result = await projectModel.updateOne({ code: code }, project).toString();
       // const resultSturesetStudentPoints
-  
+      const projects = await projectModel.find();
+      const  projactData =  await projects.map( projactItem =>  projactItem.toObject());
+      res.json(projactData);
       
     }else{
       return res.status(404).json({ error: 'Project not found' });
     }
     try {
-      const projects = await projectModel.find();
-      const  projactData =  await projects.map( projactItem =>  projactItem.toObject());
-      res.json(projactData);
+     
     } catch (error) {
       
     }
@@ -96,7 +96,7 @@ router.post('/update',async(req,res)=>
       projetcFind.startDate=project.startDate;
       projetcFind.finish_Date=project.finish_Date;
      
-      const result = await projectModel.updateOne({ _id: project._id }, projetcFind)
+      const result = await projectModel.updateOne({ _id: project._id },projetcFind)
       const projects = await projectModel.find();
       const  projactData =  await projects.map( projactItem =>  projactItem.toObject());
       res.json(projactData);

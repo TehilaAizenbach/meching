@@ -63,23 +63,15 @@ router.post('/addPoints',async(req,res)=>{
     if (student) {
       student.points = student.points + points;
       const result = await studentModel.updateOne({ id: id }, student);
-      
+    //   const students=studentModel.find()
+    // const studentsData = students.map(studentItem => studentItem.toObject());
+    res.json("studentsData").status(200);
     }
-    const students=displayStudents();
-    res.json(students).status(200);
+    
   } catch (error) {
     console.error('Error finding classes:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   } 
-  //   const [existingStudent] = await pool.query(`SELECT * FROM student WHERE id = ${id}`, [id]);
-  // try {
-  //   if (existingStudent.length === 0) {
-  //     return res.status(404).json({ error: 'Student not found' });
-  //   }
-  //   await pool.query(`UPDATE student SET points = ${existingStudent[0].points + points}  WHERE id = ${id}`);
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ error: 'Internal Server Error' });
 
  });
 
@@ -90,14 +82,14 @@ router.post('/updateStudents',async(req,res)=>{
 })
 router.post('/resetPoints',async(req,res)=>{
   try {
-    const students= await studentModel.find();
+    const  students= await studentModel.find();
      await  students.forEach(async (studentItem) => {
       studentItem.points=0;
       await studentModel.findOneAndUpdate({id:studentItem.id},studentItem);
     });
-    const studentsfind=await studentModel.find()
-    const  studentData =  studentsfind.map( studentItem =>  studentItem.toObject());
-    res.json(studentData);
+    studentsList = await studentModel.find();
+      const studentsData = await studentsList.map(studentItem => studentItem.toObject());
+      res.json("studentsData");
   } catch (error) {
     console.error('Error finding students:', error);
     res.status(500).json({ error: 'Internal Server Error' });

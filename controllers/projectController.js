@@ -26,9 +26,10 @@ addPoints:async(req,res,next)=>{
       if (next) {
         return 'success'
       }else{
-        res.json("studentsData").status(200);
+        res.json("success").status(200);
       }
     }
+    
   } catch (error) {
     console.error('Error finding classes:', error);
     res.status(500).json({ error: 'Internal Server Error' });

@@ -14,7 +14,7 @@ exports.StudentsCtrl={
     },
     addPoints:async(req,res,next)=>{
           const {studentItem,points}=req.body;
-          const id=studentItem.id;
+          const id=studentItem.code;
           try {
             const student = await StudentsModel.findOne({ id: id });
             if (student) {

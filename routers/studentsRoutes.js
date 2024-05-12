@@ -15,14 +15,13 @@ router.post('/addPoints',async(req,res,next)=>{
         await StudentsCtrl.addPoints(req, res, next)
         await ProjectCtrl.addPoints(req, res, next)
         await ClassCtrl.addPoints(req, res, next)
-
-        res.status(200).json('success')
-    } catch (error) {
+        res.json("success").status(200);
+        } catch (error) {
         console.error('Error resetting points:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-router.post('/addStudent',StudentsCtrl.addStudents,ProjectCtrl.update());
+router.post('/addStudent',StudentsCtrl.addStudents);
 router.post('/updateStudent',StudentsCtrl.updateStudent)
 router.post('/deleteStudent',StudentsCtrl.deleteStudent)
 

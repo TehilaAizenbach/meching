@@ -67,6 +67,7 @@ exports.ClassCtrl={
     }else{
       res.json("succes").status(200);
     }
+
   } catch (error) {
     console.error('Error finding classes:', error);
     res.status(500).json({ error: 'Internal Server Error' });
